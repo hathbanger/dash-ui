@@ -26,11 +26,6 @@ class ChatBot extends Component{
     componentDidUpdate(){
 	   	var div = document.getElementById("msg_container_base");
 	   	div.scrollTop = div.scrollHeight - div.clientHeight;    
-	   	// if(this.state.messages.length == 6){
-	   		// console.log("SUREVEY complete", this.state.messages)
-			// console.log(this.state.messages.filter((msg) => msg.message) )
-			// this.submitSurvey()
-	   	// }	
     }
 
     componentDidMount(){
@@ -57,7 +52,6 @@ class ChatBot extends Component{
 	submitSurvey(e){
 		let surveyArray = []
 		this.state.messages.forEach((message, index) => {
-			console.log("INDEX", this.state.messages[index])
 			if (index % 2 == 1){
 				surveyArray.push([{"question": this.state.messages[index - 1].message},{"answer":this.state.messages[index].message}])
 			}
@@ -67,7 +61,7 @@ class ChatBot extends Component{
 		    headers:  {
 		      'Content-Type':'application/json'
 		    },
-		    body: JSON.stringify({"content": surveyArray})
+		    body: JSON.stringify({"content": surveyArray, "organization": "5a0d05e82c97a62982000002"})
 		}
 
     	fetch(goApi + "/survey", config)
@@ -133,7 +127,7 @@ class ChatBot extends Component{
 	                </div>
 	                <div className="panel-footer">
 	                    <div className="input-group" onChange={e => this.handleFormStateUpdate(e)}>                   
-	                        <input 
+	                        <textarea 
 	                        	id="btn-input" 
 	                        	type="text" 
 	                        	value={this.state.messageStr}
