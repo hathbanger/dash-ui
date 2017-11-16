@@ -9,9 +9,19 @@ import FormInputs from 'components/FormInputs/FormInputs.jsx';
 import UserCard from 'components/Card/UserCard.jsx';
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
-import avatar from "assets/img/default-avatar.png";
+import {retrieveOrganization} from 'actions/organizationActions'
+import {retrieveUser} from 'actions/userActions'
+
 
 class UserPage extends Component {
+    constructor(props){
+        super(props);
+    }
+    componentDidMount(){
+        if(this.props.user == null){
+            this.props.dispatch(retrieveUser())
+        }
+    }    
     render() {
         return (
             <div className="main-content">
@@ -23,22 +33,15 @@ class UserPage extends Component {
                                 content={
                                     <form>
                                         <FormInputs
-                                            ncols = {["col-md-5" , "col-md-3" , "col-md-4"]}
+                                            ncols = {["col-md-6" , "col-md-6"]}
                                             proprieties = {[
                                                 {
                                                  label : "Company (disabled)",
                                                  type : "text",
                                                  bsClass : "form-control",
                                                  placeholder : "Company",
-                                                 defaultValue : "Creative Code Inc.",
+                                                 defaultValue : this.props.organization.organizationName ? this.props.organization.organizationName : "",
                                                  disabled : true
-                                                },
-                                                {
-                                                 label : "Username",
-                                                 type : "text",
-                                                 bsClass : "form-control",
-                                                 placeholder : "Username",
-                                                 defaultValue : "tania123"
                                                 },
                                                 {
                                                  label : "Email address",
@@ -104,15 +107,6 @@ class UserPage extends Component {
                                                 }
                                             ]}
                                         />
-
-                                        <div className="row">
-                                            <div className="col-md-12">
-                                                <FormGroup controlId="formControlsTextarea">
-                                                    <ControlLabel>About Me</ControlLabel>
-                                                    <FormControl rows="5" componentClass="textarea" bsClass="form-control" placeholder="Here can be your description" defaultValue="Lamborghini Mercy, Your chick she so thirsty, I'm in that two seat Lambo."/>
-                                                </FormGroup>
-                                            </div>
-                                        </div>
                                         <Button
                                             bsStyle="info"
                                             pullRight
@@ -129,16 +123,11 @@ class UserPage extends Component {
                         <Col md={4}>
                             <UserCard
                                 bgImage="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
-                                avatar={avatar}
-                                name="Tania Andrew"
-                                userName="tania123"
+                                avatar={"https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
+                                name={this.props.user ? this.props.user.username : ""}
                                 description={
                                     <span>
-                                        "Lamborghini Mercy
-                                        <br />
-                                        Your chick she so thirsty
-                                        <br />
-                                        I'm in that two seat Lambo"
+                                        Hey, there! I'm andrew
                                     </span>
                                 }
                                 socials={

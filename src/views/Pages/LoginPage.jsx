@@ -8,25 +8,36 @@ import Card from 'components/Card/Card.jsx';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
 
+import { loginUser, logoutUser, validateToken } from '../../actions/authActions'
+
 class LoginPage extends Component{
     constructor(props){
         super(props);
+        console.log(this.props)
         this.state = {
-            cardHidden: true
+            cardHidden: true,
+            username: "",
+            password: "",
         }
     }
     componentDidMount(){
-        var cat = localStorage.getItem("cat")
-        if(cat === 'cat'){
-            this.props.history.push('/');
-        }
         setTimeout(function() { this.setState({cardHidden: false}); }.bind(this), 700);
     }
 
-    fakeLogin(){
-        localStorage.setItem('cat', 'cattt');
-        window.location.reload();
+    handleFormStateUpdate(e){
+        if(e.target.id == "username"){
+            this.setState({username: e.target.value})
+        } else if (e.target.id == "password") {
+            this.setState({password: e.target.value})
+        }
     }
+
+    handleFormLoginSubmission(e){
+        e.preventDefault();
+        let creds = {"username": this.state.username, "password": this.state.password}
+        this.props.dispatch(loginUser(creds))
+    }
+
 
     render(){
         return (
@@ -42,11 +53,13 @@ class LoginPage extends Component{
                                     <div>
                                         <FormGroup>
                                             <ControlLabel>
-                                                Email address
+                                                Username
                                             </ControlLabel>
                                             <FormControl
-                                                placeholder="Enter email"
-                                                type="email"
+                                                onChange={e => this.handleFormStateUpdate(e)}
+                                                placeholder="Enter username"
+                                                type="username"
+                                                id="username"
                                             />
                                         </FormGroup>
                                         <FormGroup>
@@ -54,14 +67,16 @@ class LoginPage extends Component{
                                                 Password
                                             </ControlLabel>
                                             <FormControl
+                                                onChange={e => this.handleFormStateUpdate(e)}
                                                 placeholder="Password"
                                                 type="password"
+                                                id="password"
                                             />
                                         </FormGroup>
                                     </div>
                                 }
                                 legend={
-                                    <Button onClick={this.fakeLogin} bsStyle="info" fill wd>
+                                    <Button onClick={e => this.handleFormLoginSubmission(e)} bsStyle="info" fill wd>
                                         Login
                                     </Button>
                                 }

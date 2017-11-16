@@ -10,20 +10,26 @@ import PagesHeader from 'components/Header/PagesHeader.jsx';
 // dinamically create pages routes
 import pagesRoutes from 'routes/pages.jsx';
 
-import bgImage from 'assets/img/full-screen-image-3.jpg';
+import {AddPropsToRoute, validateToken} from 'utility/utilityFunctions'
 
+import bgImage from 'assets/img/landing.background.sml.jpg';
+
+const token = localStorage.getItem('id_token');
 class Pages extends Component{
     getPageClass(){
         var pageClass = "";
         switch (this.props.location.pathname) {
-            case "/login-page":
+            case "/auth/login-page":
                 pageClass = " login-page";
                 break;
-            case "/register-page":
+            case "/auth/register-page":
                 pageClass = " register-page";
                 break;
-            case "/lock-screen-page":
+            case "/auth/lock-screen-page":
                 pageClass = " lock-page";
+                break;
+            case "/auth/chatbot-demo":
+                pageClass = " register-page";
                 break;
             default:
                 pageClass = "";
@@ -35,7 +41,12 @@ class Pages extends Component{
         if(document.documentElement.className.indexOf('nav-open') !== -1){
             document.documentElement.classList.toggle('nav-open');
         }
+        let tokenValidation = validateToken(token)
+        // if(tokenValidation){
+        //     this.props.dispatch()
+        // }         
     }
+
     render(){
         return (
             <div>
@@ -47,7 +58,7 @@ class Pages extends Component{
                                 {
                                     pagesRoutes.map((prop,key) => {
                                         return (
-                                            <Route path={prop.path} component={prop.component}  key={key}/>
+                                            <Route path={prop.path} component={AddPropsToRoute(prop.component, this.props)}  key={key}/>
                                         );
                                     })
                                 }
@@ -61,5 +72,6 @@ class Pages extends Component{
         );
     }
 }
+
 
 export default Pages;

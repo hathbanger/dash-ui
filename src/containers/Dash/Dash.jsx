@@ -4,15 +4,20 @@ import {
     Route,
     Redirect
 } from 'react-router-dom';
+import { connect } from 'react-redux'
+
 // this is used to create scrollbars on windows devices like the ones from apple devices
 import * as Ps from 'perfect-scrollbar';
 import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
-// react component that creates notifications (like some alerts with messages)
+
 import NotificationSystem from 'react-notification-system';
 
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
 import Header from 'components/Header/Header.jsx';
 import Footer from 'components/Footer/Footer.jsx';
+
+import {validateToken} from 'utility/utilityFunctions'
+import {logoutUser, retrieveUser} from 'actions/authActions'
 
 // dinamically create dashboard routes
 import dashRoutes from 'routes/dash.jsx';
@@ -20,13 +25,14 @@ import dashRoutes from 'routes/dash.jsx';
 // style for notifications
 import { style } from "variables/Variables.jsx";
 
+
+const token = localStorage.getItem('id_token');
 class Dash extends Component{
     constructor(props){
         super(props);
         this.handleNotificationClick = this.handleNotificationClick.bind(this);
         this.state = {
-            _notificationSystem: null,
-            isAuthenticated: true
+            _notificationSystem: true
         };
     }
     componentDidMount(){
@@ -82,10 +88,23 @@ class Dash extends Component{
         if(e.history.action === "PUSH"){
             this.refs.mainPanel.scrollTop = 0;
         }
+
     }
     componentWillMount(){       
         if(document.documentElement.className.indexOf('nav-open') !== -1){
             document.documentElement.classList.toggle('nav-open');
+        }
+        let tokenValidation = validateToken(token)
+        if(tokenValidation){
+            if(tokenValidation.error == "token invalid"){
+                this.props.dispatch(logoutUser())
+                this.props.history.push('/auth/lock-page');
+            } else if( tokenValidation.error == "token expired" ) {
+                this.props.dispatch(logoutUser())
+                this.props.history.push('/auth/lock-screen-page');
+            }
+        } else {
+            this.props.dispatch(logoutUser())
         }
     }
 
@@ -96,7 +115,6 @@ class Dash extends Component{
                 <Sidebar {...this.props} />
                 <div className={"main-panel"+(this.props.location.pathname === "/maps/full-screen-maps" ? " main-panel-maps":"")} ref="mainPanel">
                     <Header {...this.props}/>
-                        {this.state.isAuthenticated &&
                         <Switch>
                             {
                                 dashRoutes.map((prop,key) => {
@@ -116,7 +134,7 @@ class Dash extends Component{
                                                 );
                                             } else {
                                                 return (
-                                                    <Route path={prop.path} component={prop.component} key={key}/>
+                                                    <Route path={prop.path} component={AddPropsToRoute(prop.component, this.props)} key={key} />
                                                 );
                                             }
                                         })
@@ -127,18 +145,28 @@ class Dash extends Component{
                                             );
                                         else
                                             return (
-                                                <Route path={prop.path} component={prop.component} key={key}/>
+                                                <Route path={prop.path} component={AddPropsToRoute(prop.component, this.props)} key={key} />
                                             );
                                     }
                                 })
                             }
                         </Switch>
-                        }
                     <Footer fluid/>
                 </div>
             </div>
         );
     }
+
+}
+const AddPropsToRoute = (WrappedComponent, passedProps)=>{
+    return (
+        class Route extends Component{
+            render(){
+                let props = Object.assign({}, this.props, passedProps)
+                return  <WrappedComponent {...props} />
+            }
+        }
+    )
 }
 
 export default Dash;

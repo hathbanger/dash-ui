@@ -19,13 +19,15 @@ import VectorMap from 'views/Maps/VectorMap.jsx';
 import Charts from 'views/Charts/Charts.jsx';
 import Calendar from 'views/Calendar/Calendar.jsx';
 import UserPage from 'views/Pages/UserPage.jsx';
+import EmployeesPage from 'views/Pages/EmployeesPage.jsx';
+import OrganizationPage from 'views/Pages/OrganizationPage.jsx';
 
-import pagesRoutes from './pages.jsx';
 
-// var pages = [{ path: "/pages/user-page", name: "User Page", mini: "UP", component: UserPage }].concat(pagesRoutes);
+
+// var pages = [{ path: "/pages/user-page", name: "User Page", mini: "UP", component: UserPage }];
 
 var dashRoutes = [
-    { path: "/dashboard", name: "Dashboard", icon: "pe-7s-graph", component: Dashboard },
+    { path: "/dashboard", name: "Dashboard", icon: "pe-7s-graph", component: Dashboard, render: true },
     // { collapse: true, path: "/components", name: "Components", state: "openComponents", icon: "pe-7s-plugin", views:[
     //     { path: "/components/buttons", name: "Buttons", mini: "B", component: Buttons },
     //     { path: "/components/grid-system", name: "Grid System", mini: "GS", component: GridSystem },
@@ -35,17 +37,14 @@ var dashRoutes = [
     //     { path: "/components/icons", name: "Icons", mini: "I", component: Icons },
     //     { path: "/components/typography", name: "Typography", mini: "T", component: Typography }]
     // },
-    // { collapse: true, path: "/forms", name: "Forms", state: "openForms", icon: "pe-7s-note2", views:
-    //     [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms },
-    //     { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms },
-    //     { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms },
-    //     { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard }]
+    { path: "/pages/organization-page", name: "Organization", icon: "pe-7s-culture", mini: "US", component: OrganizationPage, render: true },
+    { path: "/pages/employees-page", name: "Employees", icon: "pe-7s-users", mini: "US", component: EmployeesPage, render: true },
+    { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "US", component: UserPage, render: true },
+    // { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
+    //     [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
+    //     { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
+    //     { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
     // },
-    { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
-        [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
-        { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
-        { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
-    },
     // { collapse: true, path: "/maps", name: "Maps", state: "openMaps", icon: "pe-7s-map-marker", views:
     //     [{ path: "/maps/google-maps", name: "Google Maps", mini: "GM", component: GoogleMaps },
     //     { path: "/maps/full-screen-maps", name: "Full Screen Map", mini: "FSM", component: FullScreenMap },

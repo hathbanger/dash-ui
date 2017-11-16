@@ -4,21 +4,17 @@ import { Grid, Col, Row } from 'react-bootstrap';
 import ChartistGraph from 'react-chartist';
 // function that returns a color based on an interval of numbers
 import { scaleLinear } from "d3-scale";
-// react components used to create a SVG / Vector map
-import {
-    ComposableMap,
-    ZoomableGroup,
-    Geographies,
-    Geography,
-} from "react-simple-maps";
+
+import {retrieveOrganization} from 'actions/organizationActions'
+import {retrieveSurveys} from 'actions/surveyActions'
+import {retrieveUser} from 'actions/userActions'
+
 
 import Card from 'components/Card/Card.jsx';
 import StatsCard from 'components/Card/StatsCard.jsx';
 import Tasks from 'components/Tasks/Tasks.jsx';
 
 import {
-    dataPie,
-    dataSales,
     optionsSales,
     responsiveSales,
     dataBar,
@@ -31,145 +27,86 @@ const colorScale = scaleLinear()
 .domain([0, 1, 6820])
 .range(["#E5E5E5", "#B2B2B2", "#000000"]);
 
+var dataPie = {
+    series: [8.9]
+};
+const options = {
+    total: 10,
+    donut: true,
+    // startAngle: 270
+};
+
+var dataSales = {
+  labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '10:PM', '12:00PM', '3:00AM', '6:00AM'],
+  series: [
+    [23, 113, 67, 108, 190, 239, 307, 308]
+  ]
+};
+
 class Dashboard extends Component{
-    createTableData(){
-        var tableRows = [];
-        for(var i = 0; i < table_data.length; i++){
-            tableRows.push(
-                <tr key={i}>
-                    <td>
-                        <div className="flag">
-                            <img src={table_data[i].flag} alt="us_flag"/>
-                        </div>
-                    </td>
-                    <td>{table_data[i].country}</td>
-                    <td className="text-right">{table_data[i].count}</td>
-                    <td className="text-right">{table_data[i].percentage}</td>
-                </tr>
-            );
+    constructor(props){
+        super(props);
+        this.state = {
+            surveyRetrieve: false,
+            dataPieSeriesData: [7.84]
         }
-        return tableRows;
+
+    }    
+    componentDidMount(){
+        this.setState({surveyRetrieve: true})
+        if(this.props.user == null){
+            this.props.dispatch(retrieveUser())
+        }
+        if(this.props.surveys.length){
+            let sereneArr = []
+            if(this.props.surveys){
+                this.props.surveys.forEach(function(survey){
+                    sereneArr.push(parseInt(survey.content[1][1].answer));
+                })
+                console.log("sereneArr", sereneArr)
+                let count = sereneArr.length;          
+                // if(this.props.surveys.length == data.length){
+                let sum = sereneArr.reduce((previous, current) => current += previous);
+                let avg = Math.round(100*(sum / sereneArr.length))/100; 
+                this.setState({dataPieSeriesData: [avg]})
+            }            
+        }
     }
+    
     render(){
+        let org = this.props.organization !== null ? this.props.organization.users.length : this.props.organization;
         return (
             <div className="main-content">
+            {this.props.organization !== null &&
                 <Grid fluid>
                     <Row>
-                        <Col lg={3} sm={6}>
+                        <Col lg={6} sm={6}>
                             <StatsCard
-                                bigIcon={<i className="pe-7s-server text-warning"></i>}
-                                statsText="Capacity"
-                                statsValue="105GB"
+                                bigIcon={<i className="fa fa-user text-warning"></i>}
+                                statsText="Employees"
+                                statsValue={org}
                                 statsIcon={<i className="fa fa-refresh"></i>}
                                 statsIconText="Updated now"
                             />
                         </Col>
-                        <Col lg={3} sm={6}>
+                        <Col lg={6} sm={6}>
                             <StatsCard
-                                bigIcon={<i className="pe-7s-wallet text-success"></i>}
-                                statsText="Revenue"
-                                statsValue="$1,345"
+                                bigIcon={<i className="pe-7s-graph1 text-success"></i>}
+                                statsText="Survey's Taken"
+                                statsValue={this.props.organization.surveys.length}
                                 statsIcon={<i className="fa fa-calendar-o"></i>}
                                 statsIconText="Last day"
                             />
                         </Col>
-                        <Col lg={3} sm={6}>
-                            <StatsCard
-                                bigIcon={<i className="pe-7s-graph1 text-danger"></i>}
-                                statsText="Errors"
-                                statsValue="23"
-                                statsIcon={<i className="fa fa-clock-o"></i>}
-                                statsIconText="In the last hour"
-                            />
-                        </Col>
-                        <Col lg={3} sm={6}>
-                            <StatsCard
-                                bigIcon={<i className="fa fa-twitter text-info"></i>}
-                                statsText="Followers"
-                                statsValue="+45"
-                                statsIcon={<i className="fa fa-refresh"></i>}
-                                statsIconText="Updated now"
-                            />
-                        </Col>
                     </Row>
-                    <Row>
-                        <Col md={12}>
-                            <Card
-                                title="Global Sales by Top Locations"
-                                category="All products that were shipped"
-                                content={
-                                    <Row>
-                                        <Col md={5}>
-                                            <div className="table-responsive">
-                                                <table className="table">
-                                                    <tbody>
-                                                        {this.createTableData()}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </Col>
-                                        <Col md={6} mdOffset={1}>
-                                            <ComposableMap style={{ width: "100%", height: "300px" }}>
-                                                <ZoomableGroup>
-                                                    <Geographies geographyUrl="https://raw.githubusercontent.com/zcreativelabs/react-simple-maps/master/topojson-maps/world-50m.json">
-                                                    {(geographies, projection) => geographies.map(geography => {
-                                                        var style;
-                                                        switch (geography.id) {
-                                                            case "BRA":
-                                                            style={default: { fill: colorScale(550) }}
-                                                            break;
-                                                            case "USA":
-                                                            style={default: { fill: colorScale(2920) }}
-                                                            break;
-                                                            case "AUS":
-                                                            style={default: { fill: colorScale(760) }}
-                                                            break;
-                                                            case "DEU":
-                                                            style={default: { fill: colorScale(1300) }}
-                                                            break;
-                                                            case "GBR":
-                                                            style={default: { fill: colorScale(690) }}
-                                                            break;
-                                                            case "ROU":
-                                                            style={default: { fill: colorScale(600) }}
-                                                            break;
-                                                            default:
-                                                            style={default: { fill: colorScale(0) }}
-                                                            break;
-                                                        }
-                                                        return (
-                                                            <Geography
-                                                                key={ geography.id }
-                                                                geography={ geography }
-                                                                projection={ projection }
-                                                                onClick={ this.handleClick }
-                                                                style={style}
-                                                            />
-                                                        )
-                                                    })}
-                                                </Geographies>
-                                            </ZoomableGroup>
-                                        </ComposableMap>
-                                    </Col>
-                                </Row>
-                            }
-                        />
-                    </Col>
-                </Row>
+
                 <Row>
                     <Col md={4}>
                         <Card
-                            title="Email Statistics"
-                            category="Last Campaign Performance"
+                            title="Serene Factor"
+                            category="General happiness"
                             content={
-                                <ChartistGraph data={dataPie} type="Pie"/>
-                            }
-                            legend={
-                                <div>
-                                    <i className="fa fa-circle text-info"></i> Open
-                                    <i className="fa fa-circle text-danger"></i> Bounce
-                                    <i className="fa fa-circle text-warning"></i> Unsubscribe
-                                </div>
+                                <ChartistGraph data={{series: this.state.dataPieSeriesData}} options={options} type="Pie"/>
                             }
                             stats={
                                 <div>
@@ -204,50 +141,8 @@ class Dashboard extends Component{
                             />
                         </Col>
                     </Row>
-                    <Row>
-                        <Col md={6}>
-                            <Card
-                                title="2014 Sales"
-                                category="All products including Taxes"
-                                content={
-                                    <ChartistGraph
-                                        data={dataBar}
-                                        type="Bar"
-                                        options={optionsBar}
-                                        responsiveOptions={responsiveBar}
-                                    />
-                                }
-                                legend={
-                                    <div>
-                                        <i className="fa fa-circle text-info"></i> Tesla Model S
-                                        <i className="fa fa-circle text-danger"></i> BMW 5 Series
-                                    </div>
-                                }
-                                stats={
-                                    <div>
-                                        <i className="fa fa-check"></i> Data information certified
-                                    </div>
-                                }
-                            />
-                        </Col>
-                        <Col md={6}>
-                            <Card
-                                title="Tasks"
-                                category="Backend development"
-                                content={
-                                    <table className="table">
-                                        <Tasks />
-                                    </table>
-                                }
-                                stats={
-                                    <div>
-                                        <i className="fa fa-history"></i> Updated 3 minutes ago
-                                    </div>
-                                }
-                            />
-                        </Col>
-                    </Row>
                 </Grid>
+            }
             </div>
         );
     }
