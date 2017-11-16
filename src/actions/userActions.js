@@ -3,7 +3,7 @@ import {retrieveOrganization} from 'actions/organizationActions'
 
 export const USER_RETRIEVE_SUCCESS = 'USER_RETRIEVE_SUCCESS'
 
-const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.236.198.6/api";
 
 
 function receiveUser(data) {

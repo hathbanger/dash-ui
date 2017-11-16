@@ -61,7 +61,7 @@ class EmployeesPage extends Component{
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {
+                                            {this.props.organization &&
                                                 this.props.organization.users.map((prop,key) => {
                                                     return (
                                                         <tr key={key}>

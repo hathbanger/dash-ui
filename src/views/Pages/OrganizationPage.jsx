@@ -41,7 +41,7 @@ class OrganizationPage extends Component {
                                                  type : "text",
                                                  bsClass : "form-control",
                                                  placeholder : "Company",
-                                                 defaultValue : this.props.organization.organizationName ? this.props.organization.organizationName : "",
+                                                 defaultValue : this.props.organization ? this.props.organization.organizationName : "",
                                                  disabled : true
                                                 },
                                                 {
@@ -135,8 +135,8 @@ class OrganizationPage extends Component {
                                                     type : "text",
                                                     className: "text-center",
                                                     bsClass : "form-control",
-                                                    placeholder : window.location.host + "/auth/register-page?organization=" + this.props.organization.id,
-                                                    value : window.location.host + "/auth/register-page?organization=" + this.props.organization.id
+                                                    placeholder : window.location.host + "/auth/register-page?organization=5a0d06eb2c97a62982000004",
+                                                    value : window.location.host + "/auth/register-page?organization=5a0d06eb2c97a62982000004"
                                                 }
                                             ]}
                                         />                                

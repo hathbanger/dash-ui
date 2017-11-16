@@ -6,7 +6,7 @@ import {
 } from 'react-bootstrap';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
-const botProfile = {name: "Lou", bot: true, profPic: "http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"}
+const botProfile = {name: "Lou", bot: true, profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
 const guestProfile = {name: "Guest", bot: false, profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
 const timeThen = new Date()
 const louApi = window.location.hostname == "localhost" ? "localhost:3030" : "104.236.198.6/lou";
@@ -31,9 +31,9 @@ class ChatBot extends Component{
     componentDidMount(){
 	    this.connection = new WebSocket('ws://' + louApi);
 	    this.connection.onopen = evt => {
-	    	this.connection.send("survey1");
+	    	this.connection.send("survey2");
 	    }
-	    this.connection.onmessage = evt => { 
+	    this.connection.onmessage = evt => {
 	      this.setState({messages: [...this.state.messages, {user: botProfile, messageTime: new Date(), message: evt.data}]})
 	    }
     }
@@ -45,8 +45,8 @@ class ChatBot extends Component{
     handleFormLoginSubmission(e){
         e.preventDefault();
     	let messageTime = new Date();
-        this.setState({messageStr: "", messages: [...this.state.messages, {user: guestProfile, messageTime: messageTime, message: this.state.messageStr}]})    
-	    this.connection.send(this.state.messageStr);
+        this.setState({messageStr: "", messages: [...this.state.messages, {user: guestProfile, messageTime: messageTime, message: this.state.messageStr}]});
+        this.connection.send(this.state.messageStr);
     }     
 
 	submitSurvey(e){
@@ -75,8 +75,6 @@ class ChatBot extends Component{
     handleFormEnterSubmission(e){
         if(e.key === 'Enter' && this.state.messageStr.length > 0){
 	    	this.handleFormLoginSubmission(e);
-	    	// let messageTime = new Date();
-        	// this.setState({messageStr: "", messages: [...this.state.messages, {user: guestProfile, messageTime: messageTime, message: this.state.messageStr}]})
         }
     }    
 
