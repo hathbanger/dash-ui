@@ -3,6 +3,7 @@ import {retrieveSurveys} from 'actions/surveyActions'
 
 export const ORG_RETRIEVE_SUCCESS = 'ORG_RETRIEVE_SUCCESS'
 
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
 
 function receiveOrganization(data) {
   return {
@@ -23,7 +24,7 @@ export function retrieveOrganization(organizationId) {
   }
   let userTokenData = unmarshallToken(token);
   return dispatch => {
-    return fetch("http://localhost:1323/" + organizationId, config)
+    return fetch(goApi + organizationId, config)
     .then((response) => {
         return response.json();
       }).then((data) => {

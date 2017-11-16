@@ -9,6 +9,10 @@ import Button from 'elements/CustomButton/CustomButton.jsx';
 const botProfile = {name: "Lou", bot: true, profPic: "http://www.bitrebels.com/wp-content/uploads/2011/02/Original-Facebook-Geek-Profile-Avatar-1.jpg"}
 const guestProfile = {name: "Guest", bot: false, profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
 const timeThen = new Date()
+const louApi = window.location.hostname == "localhost" ? "localhost:3030" : "104.236.198.6/lou";
+
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
+
 class ChatBot extends Component{
 
     constructor(props){
@@ -30,13 +34,11 @@ class ChatBot extends Component{
     }
 
     componentDidMount(){
-    	console.log("WOO!")
-    	// this.messageBot("Serene");
-
-	    this.connection = new WebSocket('ws://localhost:3030');
+	    this.connection = new WebSocket('ws://' + louApi);
+	    this.connection.onopen = evt => {
+	    	this.connection.send("survey1");
+	    }
 	    this.connection.onmessage = evt => { 
-	      console.log("MESSAGE", evt.data)
-	      // this.connection.send(evt.data);
 	      this.setState({messages: [...this.state.messages, {user: botProfile, messageTime: new Date(), message: evt.data}]})
 	    }
     }
@@ -49,32 +51,8 @@ class ChatBot extends Component{
         e.preventDefault();
     	let messageTime = new Date();
         this.setState({messageStr: "", messages: [...this.state.messages, {user: guestProfile, messageTime: messageTime, message: this.state.messageStr}]})    
-    	this.messageBot(this.state.messageStr);
 	    this.connection.send(this.state.messageStr);
     }     
-
-	messageBot(e){
-    	let messageTime = new Date();
-		// let config =  {
-		//     method: 'POST',
-		//     headers:  {
-		//       'Content-Type':'application/json'
-		//     },
-		//     body: JSON.stringify({"message": e})
-		// }
-		// this.connection.send({"message": e})
-    	// fetch("http://localhost:3030/", config)
-	    // 	.then((response) => {
-	    //     return response.json();
-	    // }).then((data) => {
-    	// 	messageTime = new Date();
-    	// 	setTimeout(() => {
-    	// 		let message = data.responseText;
-	    // 		this.setState({messages: [...this.state.messages, {user: botProfile, messageTime: messageTime, message: message}]})
-    	// 	}, Math.random() * 1000)
-	    // });	
-	}    
-
 
 	submitSurvey(e){
 		let surveyArray = []
@@ -92,7 +70,7 @@ class ChatBot extends Component{
 		    body: JSON.stringify({"content": surveyArray})
 		}
 
-    	fetch("http://localhost:1323/survey", config)
+    	fetch(goApi + "/survey", config)
 	    	.then((response) => {
 	        return response.json();
 	    }).then((data) => {

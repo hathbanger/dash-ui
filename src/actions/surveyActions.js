@@ -2,6 +2,8 @@ import {unmarshallToken} from 'utility/utilityFunctions'
 
 export const SURVEYS_RETRIEVE_SUCCESS = 'SURVEYS_RETRIEVE_SUCCESS'
 
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
+
 
 function receiveSurveys(data) {
   return {
@@ -19,7 +21,7 @@ export function retrieveSurveys(organization) {
   }   
   let userTokenData = unmarshallToken(token);
   return dispatch => {
-    return fetch("http://localhost:1323/" + organization.id +"/get-surveys", config)
+    return fetch(goApi + "/" + organization.id +"/get-surveys", config)
     .then((response) => { 
         return response.json();
       }).then((data) => {        

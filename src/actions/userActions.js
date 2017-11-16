@@ -3,6 +3,8 @@ import {retrieveOrganization} from 'actions/organizationActions'
 
 export const USER_RETRIEVE_SUCCESS = 'USER_RETRIEVE_SUCCESS'
 
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
+
 
 function receiveUser(data) {
   return {
@@ -21,7 +23,7 @@ export function createUser(creds) {
   }
   return dispatch => {
     // dispatch(requestLogin(creds))
-    return fetch("http://localhost:1323/user", config)
+    return fetch(goApi + "/user", config)
     .then((response) => { 
         return response.json();
       }).then((data) => {
@@ -38,7 +40,7 @@ export function retrieveUser() {
   let token = localStorage.getItem('id_token');
   let config = generateFetchConfigCredentials("GET", token)
   return dispatch => {
-    return fetch("http://localhost:1323/user", config)
+    return fetch(goApi + "/user", config)
     .then((response) => { 
         return response.json();
       }).then((data) => {

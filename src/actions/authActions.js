@@ -7,6 +7,7 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 
 export const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS'
 
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
 
 function requestLogin(creds) {
   return {
@@ -71,7 +72,7 @@ export function loginUser(creds) {
   }
   return dispatch => {
     dispatch(requestLogin(creds))
-    return fetch("http://localhost:1323/login", config)
+    return fetch(goApi + "/login", config)
     .then((response) => { 
         return response.json();
       }).then((data) => {
