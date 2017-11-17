@@ -105,7 +105,6 @@ class ChatBot extends Component{
 
         return (
 		<div className="chat-window col-md-12" id="chat_window_1">
-	        <div className="col-md-8 col-md-offset-2">
 	            <div className="panel panel-default">
 	                <div className="panel-body msg_container_base" id="msg_container_base">
 	                	{this.state.messages.map(function(messageObject, index){
@@ -164,7 +163,6 @@ class ChatBot extends Component{
 	                    </div>
 	                </div>
 	            </div>
-	        </div>
 	    </div>
  
         );
