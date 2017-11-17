@@ -22,8 +22,6 @@ class ChatbotDemo extends Component{
                 <Row>
                     <Col md={8} mdOffset={2}>
                         <div className="header-text">
-                            <h2>meet Lou</h2>
-                            <hr />
                         </div>
                     </Col>       
                 </Row>

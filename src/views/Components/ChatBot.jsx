@@ -6,12 +6,16 @@ import {
 } from 'react-bootstrap';
 
 import Button from 'elements/CustomButton/CustomButton.jsx';
-const botProfile = {name: "Lou", bot: true, profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
-const guestProfile = {name: "Guest", bot: false, profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
+const botProfile = {name: "Lou", 
+					bot: true, 
+					profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
+const guestProfile = {	name: "Guest", 
+						bot: false, 
+						profPic: "https://www.icbr.org/wp-content/uploads/2014/05/Avatar.jpg"}
 const timeThen = new Date()
 const louApi = window.location.hostname == "localhost" ? "localhost:3030" : "104.236.198.6/lou";
 
-const goApi = window.location.hostname == "localhost" ? "http://localhost:1323" : "http://104.236.198.6/api";
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.236.198.6/api";
 
 class ChatBot extends Component{
 
@@ -34,7 +38,16 @@ class ChatBot extends Component{
 	    	this.connection.send("survey2");
 	    }
 	    this.connection.onmessage = evt => {
-	      this.setState({messages: [...this.state.messages, {user: botProfile, messageTime: new Date(), message: evt.data}]})
+	      this.setState({messages: [...this.state.messages, 
+	      							{	user: botProfile, 
+	      								messageTime: new Date(), 
+	      								message: evt.data}]});
+	      if(evt.data == "Excellent! The team will follow up! Thanks for talking to us." ||
+	      	evt.data == "Thank you! And thanks for talking us, have a great conference" ||
+	      	evt.data == "Excellent! The team will get in touch, thanks for your time today!") {
+	      	console.log("SURVEY OVER!");
+	      	this.submitSurvey()
+	      }
 	    }
     }
 
@@ -45,15 +58,22 @@ class ChatBot extends Component{
     handleFormLoginSubmission(e){
         e.preventDefault();
     	let messageTime = new Date();
-        this.setState({messageStr: "", messages: [...this.state.messages, {user: guestProfile, messageTime: messageTime, message: this.state.messageStr}]});
-        this.connection.send(this.state.messageStr);
+
+    	this.connection.send(this.state.messageStr);    		
+
+        this.setState({messageStr: "", messages: [...this.state.messages, 
+        											{	user: guestProfile, 
+        												messageTime: messageTime, 
+        												message: this.state.messageStr}]});
+
     }     
 
 	submitSurvey(e){
 		let surveyArray = []
 		this.state.messages.forEach((message, index) => {
 			if (index % 2 == 1){
-				surveyArray.push([{"question": this.state.messages[index - 1].message},{"answer":this.state.messages[index].message}])
+				surveyArray.push([	{"question": this.state.messages[index - 1].message},
+									{"answer":this.state.messages[index].message}])
 			}
 		})
 		let config =  {
@@ -99,7 +119,9 @@ class ChatBot extends Component{
 				                        <div className="col-md-10 col-xs-10">
 				                            <div className="messages msg_receive">
 				                                <p>{messageObject.message}</p>				                                
-				                                <time>{messageObject.user.name} • {minutesPassed == 0 ? "Just now" : minutesPassed}{minutesPassed < 1 ? "" : "minutes ago"}</time>
+				                                <time>{messageObject.user.name} • 
+				                                {minutesPassed == 0 ? "Just now" : minutesPassed}
+				                                {minutesPassed < 1 ? "" : "minutes ago"}</time>
 				                            </div>
 				                        </div>
 				                    </div>
@@ -110,7 +132,8 @@ class ChatBot extends Component{
 			                        <div className="col-md-10 col-xs-10">
 			                            <div className="messages msg_sent">
 			                                <p>{messageObject.message}</p>			                                
-			                                <time>Guest • {minutesPassed == 0 ? "Just now" : minutesPassed}{minutesPassed < 1 ? "" : " minutes ago"}</time>
+			                                <time>Guest • {minutesPassed == 0 ? "Just now" : minutesPassed}
+			                                {minutesPassed < 1 ? "" : " minutes ago"}</time>
 			                            </div>
 			                        </div>
 			                        <div className="col-md-2 col-xs-2 avatar">
