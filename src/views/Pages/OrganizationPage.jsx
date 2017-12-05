@@ -42,7 +42,7 @@ class OrganizationPage extends Component {
                                                  bsClass : "form-control",
                                                  placeholder : "Company",
                                                  defaultValue : this.props.organization ? this.props.organization.organizationName : "",
-                                                 disabled : true
+                                                 disabled : false
                                                 },
                                                 {
                                                  label : "Email address",

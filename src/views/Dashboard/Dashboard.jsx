@@ -39,16 +39,35 @@ const options = {
 var dataSales = {
   labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '10:PM', '12:00PM', '3:00AM', '6:00AM'],
   series: [
-    [23, 113, 67, 108, 190, 239, 307, 308]
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
+    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800]
   ]
 };
+
+var biPolarLineChartOptions = {
+  high: 800,
+  low: 0,
+  showArea: false,
+  showLine: true,
+  showPoint: false,
+  axisX: {
+    showLabel: false,
+    showGrid: false
+  }
+}
 
 class Dashboard extends Component{
     constructor(props){
         super(props);
         this.state = {
             surveyRetrieve: false,
-            dataPieSeriesData: [7.84]
+            dataPieSeriesData: [0],
+            sereneRatingCount: 0,
+            surveyFinishedCount: 0
         }
 
     }    
@@ -59,41 +78,73 @@ class Dashboard extends Component{
         }
         if(this.props.surveys.length){
             let sereneArr = []
+            let ratingArr = []
+            let finishedArr = []
             if(this.props.surveys){
                 this.props.surveys.forEach(function(survey){
-                    sereneArr.push(parseInt(survey.content[1][1].answer));
-                })
-                console.log("sereneArr", sereneArr)
-                let count = sereneArr.length;          
-                // if(this.props.surveys.length == data.length){
-                let sum = sereneArr.reduce((previous, current) => current += previous);
-                let avg = Math.round(100*(sum / sereneArr.length))/100; 
-                this.setState({dataPieSeriesData: [avg]})
+
+                    if(survey.finished){
+                        finishedArr.push(survey)
+                    }
+
+                    survey.answers.forEach(function(answer){
+
+                        if(parseInt(answer)){
+                            console.log("Answer", parseInt(answer))
+                            ratingArr.push(parseInt(answer))
+                        }
+
+                    });
+                });
+
+                    let count = ratingArr.length
+                    this.setState({sereneRatingCount: ratingArr.length});         
+                    this.setState({surveyFinishedCount: finishedArr.length});         
+                // if(this.props.surveys.length == ratingArr.length){
+                    if(ratingArr.length > 0){
+                        console.log("ratingArr", ratingArr)
+                        let sum = ratingArr.reduce((previous, current) => current += previous);
+                        let avg = Math.round(100*(sum / ratingArr.length))/100; 
+                        this.setState({dataPieSeriesData: [avg]})
+                    }
+                // }
             }            
         }
     }
     
     render(){
-        let org = this.props.organization !== null ? this.props.organization.users.length : this.props.organization;
+        if(this.props.organization !== null){
+            console.log("this.props.organization.surveys.filter(arr => arr.finished)", this.props.organization.surveys.filter(arr => arr.finished))
+        }
+        // let org = this.props.organizations !== undefined ? this.props.organizations[0].users.length : this.props.organizations[0];
         return (
             <div className="main-content">
             {this.props.organization !== null &&
                 <Grid fluid>
                     <Row>
-                        <Col lg={6} sm={6}>
+                        <Col lg={4} sm={4}>
                             <StatsCard
                                 bigIcon={<i className="fa fa-user text-warning"></i>}
                                 statsText="Employees"
-                                statsValue={org}
+                                statsValue={this.props.organization.users.length}
                                 statsIcon={<i className="fa fa-refresh"></i>}
                                 statsIconText="Updated now"
                             />
                         </Col>
-                        <Col lg={6} sm={6}>
+                        <Col lg={4} sm={4}>
                             <StatsCard
                                 bigIcon={<i className="pe-7s-graph1 text-success"></i>}
-                                statsText="Survey's Taken"
+                                statsText="Survey's Sent"
                                 statsValue={this.props.organization.surveys.length}
+                                statsIcon={<i className="fa fa-calendar-o"></i>}
+                                statsIconText="Last day"
+                            />
+                        </Col>
+                        <Col lg={4} sm={4}>
+                            <StatsCard
+                                bigIcon={<i className="pe-7s-graph1 text-success"></i>}
+                                statsText="Survey's Finished"
+                                statsValue={this.state.surveyFinishedCount}
                                 statsIcon={<i className="fa fa-calendar-o"></i>}
                                 statsIconText="Last day"
                             />
@@ -103,14 +154,14 @@ class Dashboard extends Component{
                 <Row>
                     <Col md={4}>
                         <Card
-                            title="Serene Factor"
-                            category="General happiness"
+                            title="Serene Factor" 
+                            category={`General happiness`}
                             content={
-                                <ChartistGraph data={{series: this.state.dataPieSeriesData}} options={options} type="Pie"/>
+                                <ChartistGraph data={{series: this.state.dataPieSeriesData}} options={options}  type="Pie"/>
                             }
                             stats={
                                 <div>
-                                    <i className="fa fa-clock-o"></i> Campaign sent 2 days ago
+                                    <i className="fa fa-clock-o"></i>{`based on ${this.state.sereneRatingCount} employees`}
                                 </div>
                             }
                         />
@@ -123,7 +174,7 @@ class Dashboard extends Component{
                                 <ChartistGraph
                                     data={dataSales}
                                     type="Line"
-                                    options={optionsSales}
+                                    options={biPolarLineChartOptions}
                                     responsiveOptions={responsiveSales}/>
                                 }
                                 legend={

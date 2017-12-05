@@ -37,6 +37,13 @@ var dashRoutes = [
     //     { path: "/components/icons", name: "Icons", mini: "I", component: Icons },
     //     { path: "/components/typography", name: "Typography", mini: "T", component: Typography }]
     // },
+
+    { collapse: true, path: "/forms", name: "Forms", state: "openForms", render: true, icon: "pe-7s-note2", views:
+        [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms, render: true },
+        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms, render: true },
+        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms, render: true },
+        { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, render: true }]
+    },    
     { path: "/pages/organization-page", name: "Organization", icon: "pe-7s-culture", mini: "US", component: OrganizationPage, render: true },
     { path: "/pages/employees-page", name: "Employees", icon: "pe-7s-users", mini: "US", component: EmployeesPage, render: true },
     { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "US", component: UserPage, render: true },

@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import {
     Table,
-    Grid, Row, Col
+    Grid, Row, Col,
+    FormGroup,
+    ControlLabel, FormControl,
+    HelpBlock,
 } from 'react-bootstrap';
 
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
 
 import Card from 'components/Card/Card.jsx';
-
+import {retrieveUser} from 'actions/userActions'
 const thArray = ["id"];
 
 // const {PieChart, Pie, Legend, Tooltip} = Recharts;
@@ -28,6 +31,15 @@ const TwoSimplePieChart = React.createClass({
   }
 })
 
+function FieldGroup({ id, label, help, ...props }) {
+  return (
+    <FormGroup controlId={id}>
+      <ControlLabel>{label}</ControlLabel>
+      <FormControl {...props} />
+      {help && <HelpBlock>{help}</HelpBlock>}
+    </FormGroup>
+  );
+}
 
 class EmployeesPage extends Component{
 
@@ -35,6 +47,12 @@ class EmployeesPage extends Component{
         super(props);
         this.state = {
         };        
+    }
+
+    componentDidMount(){
+        if(this.props.user == null){
+            this.props.dispatch(retrieveUser())
+        }        
     }
 
     render(){
@@ -48,6 +66,7 @@ class EmployeesPage extends Component{
                                 category="Employees still at the company"
                                 tableFullWidth
                                 content={
+                                    <div>
                                     <Table striped hover responsive>
                                         <thead>
                                             <tr>
@@ -74,6 +93,14 @@ class EmployeesPage extends Component{
                                             }
                                         </tbody>
                                     </Table>
+                                    <FieldGroup
+                                      id="formControlsFile"
+                                      type="file"
+                                      label="File"
+                                      help="Example block-level help text here."
+                                    />
+
+                                    </div>
                                 }
                             />
                         </Col>

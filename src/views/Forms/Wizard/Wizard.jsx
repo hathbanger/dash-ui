@@ -23,7 +23,7 @@ class Wizard extends Component{
             <div className="main-content">
                 <Grid fluid>
                     <Row>
-                        <Col md={8} mdOffset={2}>
+                        <Col md={12}>
                             <Card
                                 wizard
                                 id="wizardCard"
@@ -33,7 +33,7 @@ class Wizard extends Component{
                                 content={
                                     <StepZilla
                                         steps={steps}
-                                        stepsNavigation={false}
+                                        stepsNavigation={true}
                                         nextButtonCls="btn btn-prev btn-info btn-fill pull-right btn-wd"
                                         backButtonCls="btn btn-next btn-default btn-fill pull-left btn-wd"
                                     />

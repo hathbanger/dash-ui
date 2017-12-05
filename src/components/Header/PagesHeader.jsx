@@ -51,7 +51,18 @@ class PagesHeader extends Component{
                                 <p>Login</p>
                             </NavLink>
                         </li>
-
+                        <li className={this.activeRoute('register-page')}>
+                            <NavLink to={'/auth/register-page'} className="nav-link">
+                                <i className="fa fa-user-circle-o"></i>
+                                <p>Register</p>
+                            </NavLink>
+                        </li>
+                        <li className={this.activeRoute('lock-screen-page')}>
+                            <NavLink to={'/auth/lock-screen-page'} className="nav-link">
+                                <i className="fa fa-lock"></i>
+                                <p>Lock Screen</p>
+                            </NavLink>
+                        </li>
                     </ul>
                 </Navbar.Collapse>
             </Navbar>
@@ -60,16 +71,3 @@ class PagesHeader extends Component{
 }
 
 export default PagesHeader;
-
-// <li className={this.activeRoute('register-page')}>
-//     <NavLink to={'/auth/register-page'} className="nav-link">
-//         <i className="fa fa-user-circle-o"></i>
-//         <p>Register</p>
-//     </NavLink>
-// </li>
-// <li className={this.activeRoute('lock-screen-page')}>
-//     <NavLink to={'/auth/lock-screen-page'} className="nav-link">
-//         <i className="fa fa-lock"></i>
-//         <p>Lock Screen</p>
-//     </NavLink>
-// </li>
