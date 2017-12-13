@@ -1,10 +1,13 @@
+sudo: required
+
 language: node_js
-node_js:
-  - "iojs"
-  - "7"
+
 cache:
   directories:
     -s "$HOME/coding/google-cloud-sdk"
+
+services:
+  - docker
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
@@ -21,7 +24,7 @@ before_install:
   # - dep ensure
   
 install:
-  - sudo docker build -t test/build .
+  - npm install
 # TODO; implement test coverage check
 script:
   - echo "Skip Tests"
