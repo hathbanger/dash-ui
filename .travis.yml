@@ -1,12 +1,9 @@
-# Use Dockerized infrastructure
-sudo: required
-
-language: node_js
-
-# Cache Gcloud SDK between commands
+language: go
+go:
+  - 1.9.1
 cache:
   directories:
-    - "$HOME/google-cloud-sdk/"
+    -s "$HOME/coding/google-cloud-sdk"
 
 # Install services
 services:
