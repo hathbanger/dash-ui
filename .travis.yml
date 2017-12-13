@@ -1,6 +1,8 @@
 sudo: required
 
 language: node_js
+node_js:
+ - "node"
 
 cache:
   directories:
@@ -20,7 +22,7 @@ before_install:
   - gcloud --quiet version
   - gcloud --quiet components update
   - gcloud --quiet components update beta
-  # - npm install
+  - npm install
   # - dep ensure
   
 install:
