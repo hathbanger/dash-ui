@@ -1,40 +1,48 @@
-sudo: required
 
+# Use Dockerized infrastructure
+sudo: false
+
+# Use node_js environnement
 language: node_js
 node_js:
- - "node"
+  - "6"
 
 cache:
   directories:
-    -s "$HOME/coding/google-cloud-sdk"
+    - "$HOME/google-cloud-sdk/"
 
-services:
-  - docker
+
+
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
     - PROJECT_NAME=serene-188901
     - CLUSTER_NAME=serene
     - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-before_install:
-  # - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+
+
+install:
+  - npm install
+
+script:
+  - npm test
+
+before_deploy:
+  - gcloud version || true
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
   - gcloud --quiet components update
   - gcloud --quiet components update beta
+  - gcloud --quiet components update kubectl
   # - npm install
   # - dep ensure
-  
-install:
-  # - sudo docker build -t test/build .
-  - npm install
+
 # TODO; implement test coverage check
-script:
-  - echo "Skip Tests"
-  # - go test ./... -tags dev -v
-  # - goreporter -p ./ -r ./reports -e -f text
-before_deploy:
-  - gcloud --quiet components update kubectl
+# script:
+#   - echo "Skip Tests"
+#   # - go test ./... -tags dev -v
+#   # - goreporter -p ./ -r ./reports -e -f text
 deploy:
   - provider: script
     script: ./resources/deploy.sh
