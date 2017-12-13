@@ -1,5 +1,6 @@
 import {unmarshallToken} from 'utility/utilityFunctions'
 import {retrieveSurveys} from 'actions/surveyActions'
+import {retrieveTeams} from 'actions/teamActions'
 
 export const ORG_RETRIEVE_SUCCESS = 'ORG_RETRIEVE_SUCCESS'
 
@@ -29,6 +30,7 @@ export function retrieveOrganization(organizationId) {
       }).then((data) => {
           console.log(data)
           dispatch(receiveOrganization(data))
+          dispatch(retrieveTeams(organizationId))
           dispatch(retrieveSurveys(data))
       });
   }

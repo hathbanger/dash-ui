@@ -38,15 +38,15 @@ var dashRoutes = [
     //     { path: "/components/typography", name: "Typography", mini: "T", component: Typography }]
     // },
 
-    { collapse: true, path: "/forms", name: "Forms", state: "openForms", render: true, icon: "pe-7s-note2", views:
-        [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms, render: true },
-        { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms, render: true },
-        { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms, render: true },
-        { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, render: true }]
-    },    
+    // { collapse: true, path: "/forms", name: "Forms", state: "openForms", render: true, icon: "pe-7s-note2", views:
+    //     [{ path: "/forms/regular-forms", name: "Regular Forms", mini: "RF", component: RegularForms, render: true },
+    //     { path: "/forms/extended-forms", name: "Extended Forms", mini: "EF", component: ExtendedForms, render: true },
+    //     { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms, render: true },
+    //     { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, render: true }]
+    // },    
     { path: "/pages/organization-page", name: "Organization", icon: "pe-7s-culture", mini: "US", component: OrganizationPage, render: true },
     { path: "/pages/employees-page", name: "Employees", icon: "pe-7s-users", mini: "US", component: EmployeesPage, render: true },
-    { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "US", component: UserPage, render: true },
+    { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "US", component: UserPage, render: true }
     // { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
     //     [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
     //     { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
@@ -59,6 +59,6 @@ var dashRoutes = [
     // },
     // { path: "/charts", name: "Charts", icon: "pe-7s-graph1", component: Charts },
     // { path: "/calendar", name: "Calendar", icon: "pe-7s-date", component: Calendar },
-    { redirect: true, path: "/", pathTo: "/dashboard", name: "Dashboard" }
+    // { redirect: true, path: "/", pathTo: "/dashboard", name: "Dashboard" }
 ];
 export default dashRoutes;

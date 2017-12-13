@@ -36,13 +36,14 @@ function mapStateToProps(state) {
   
   const {   auth  } = state
 
-  const {   isAuthenticated, thisTest, user, organization, surveys } = auth
+  const {   isAuthenticated, thisTest, user, organization, teams, surveys } = auth
   
   return {
     isAuthenticated,
     thisTest,
     user,
     organization,
+    teams,
     surveys
   }
 }

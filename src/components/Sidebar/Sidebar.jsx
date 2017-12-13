@@ -7,6 +7,9 @@ import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 
 import HeaderLinks from 'components/Header/HeaderLinks.jsx';
 
+import Dashboard from 'views/Dashboard/Dashboard.jsx';
+import Team from 'views/Team/Team.jsx';
+
 // backgroundImage for Sidebar
 import image from 'assets/img/landing.background.sml.jpg';
 // logo for sidebar
@@ -60,6 +63,43 @@ class Sidebar extends Component{
         return bool;
     }
     render(){
+        console.log("this.props in sidebar", this.props.teams.filter(team => team.teamType == "location"));
+        let arrayOfIndices = []
+        let arrayOfTypes = []
+        this.props.teams.forEach(team => {
+            let type = team.teamType;
+            if(arrayOfIndices.indexOf(type) == -1){
+                arrayOfIndices.push(team.teamType)
+            }
+        })
+              
+        arrayOfIndices.forEach(i => {
+            arrayOfTypes.push(this.props.teams.filter(team => team.teamType == i))
+        })
+
+        let additionalRoutes = [...dashRoutes]
+
+        arrayOfTypes.forEach(types => {
+                let typeObj = {}
+                typeObj.collapse = true;
+                typeObj.icon = "pe-7s-note2";
+                typeObj.name = types[0].teamType;
+                typeObj.render = true;
+                typeObj.path = `/${types[0].teamType.toLowerCase()}`;
+                typeObj.state = `${types[0].teamType.toLowerCase()}`;
+                typeObj.views = [];
+                types.forEach(type => {
+                    type.icon = "pe-7s-rocket";
+                    type.mini = "US";
+                    type.name = type.teamName;
+                    type.path = `${typeObj.path}/${type.teamName}`;
+                    type.render = true;
+                    type.component = Team;
+                    typeObj.views.push(type);
+                })  
+                additionalRoutes.push(typeObj);
+            });
+
         return (
 
             <div className="sidebar" data-color="black" data-image={image}>
@@ -82,9 +122,13 @@ class Sidebar extends Component{
                             with the speciffic parent button and with it's children which are the links
                         */}
                         {
-                            dashRoutes.map((prop,key) => {
+                            additionalRoutes.map((prop,key) => {
                                 var st = {};
                                 st[prop["state"]] = !this.state[prop.state];
+                                let newState = this.state
+                                if(this.activeRoute(prop.path) == 'active'){
+                                    newState[`${prop.state}`] = true
+                                }
                                 if(prop.render){
                                     if(prop.collapse){
                                         return (
@@ -95,15 +139,16 @@ class Sidebar extends Component{
                                                        <b className={this.state[prop.state] ? "caret rotate-180":"caret"}></b>
                                                     </p>
                                                 </a>
-                                                <Collapse in={this.state[prop.state]}>
+                                                <Collapse in={newState[prop.state]}>
                                                     <ul className="nav">
                                                         {
                                                             prop.views.map((prop,key) => {
+                                                                console.log("prop.path",prop.path)
                                                                 return (
                                                                     <li className={this.activeRoute(prop.path)} key={key}>
                                                                         <NavLink to={prop.path} className="nav-link" activeClassName="active">
                                                                             <span className="sidebar-mini">{prop.mini}</span>
-                                                                            <span className="sidebar-normal">{this.props.user ? this.props.user.username : ""}</span>
+                                                                            <span className="sidebar-normal">{prop.name}</span>
                                                                         </NavLink>
                                                                     </li>
                                                                 );
@@ -131,6 +176,7 @@ class Sidebar extends Component{
                                 }
                             })
                         }
+                       
                     </ul>
                 </div>
             </div>

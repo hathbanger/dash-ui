@@ -17,6 +17,10 @@ import {
 } from '../actions/organizationActions'
 
 import {
+  TEAMS_RETRIEVE_SUCCESS,
+} from '../actions/teamActions'
+
+import {
   SURVEYS_RETRIEVE_SUCCESS,
 } from '../actions/surveyActions'
 
@@ -25,6 +29,7 @@ let newState = {
     thisTest: true,
     user: null,
     organization: null,
+    teams: [],
     surveys: [],
   };
 
@@ -42,6 +47,10 @@ function auth(state = newState, action) {
     case ORG_RETRIEVE_SUCCESS:
       return Object.assign({}, state, {
         organization: action.organization
+      })
+    case TEAMS_RETRIEVE_SUCCESS:
+      return Object.assign({}, state, {
+        teams: action.teams
       })
     case LOGIN_REQUEST:
       return Object.assign({}, state, {

@@ -12,6 +12,10 @@ import 'perfect-scrollbar/dist/css/perfect-scrollbar.min.css';
 
 import NotificationSystem from 'react-notification-system';
 
+
+import Dashboard from 'views/Dashboard/Dashboard.jsx';
+import Team from 'views/Team/Team.jsx';
+
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
 import Header from 'components/Header/Header.jsx';
 import Footer from 'components/Footer/Footer.jsx';
@@ -109,6 +113,44 @@ class Dash extends Component{
     }
 
     render(){
+        let arrayOfIndices = []
+        let arrayOfTypes = []
+        this.props.teams.forEach(team => {
+            let type = team.teamType;
+            if(arrayOfIndices.indexOf(type) == -1){
+                arrayOfIndices.push(team.teamType)
+            }
+        })
+              
+        arrayOfIndices.forEach(i => {
+            arrayOfTypes.push(this.props.teams.filter(team => team.teamType == i))
+        })
+
+        let additionalRoutes = [...dashRoutes]
+
+        arrayOfTypes.forEach(types => {
+                let typeObj = {}
+                typeObj.collapse = true;
+                typeObj.icon = "pe-7s-note2";
+                typeObj.name = types[0].teamType;
+                typeObj.render = true;
+                typeObj.path = `/${types[0].teamType.toLowerCase()}`;
+                typeObj.state = `${types[0].teamType.toLowerCase()}`;
+                typeObj.views = [];
+                types.forEach(type => {
+                    type.icon = "pe-7s-rocket";
+                    type.mini = "US";
+                    type.name = type.teamName;
+                    type.path = `${typeObj.path}/${type.teamName}`;
+                    type.render = true;
+                    type.component = Team;
+                    typeObj.views.push(type);
+                })  
+                additionalRoutes.push(typeObj);
+            });
+
+
+
         return (
             <div className="wrapper">
                 <NotificationSystem ref="notificationSystem" style={style}/>
@@ -117,7 +159,8 @@ class Dash extends Component{
                     <Header {...this.props}/>
                         <Switch>
                             {
-                                dashRoutes.map((prop,key) => {
+                                additionalRoutes.map((prop,key) => {
+                                    console.log("PROP IN ADDTL ROUTES", prop)
                                     if(prop.collapse){
                                         return prop.views.map((prop,key) => {
                                             if(prop.name === "Notifications"){
@@ -151,6 +194,7 @@ class Dash extends Component{
                                 })
                             }
                         </Switch>
+
                     <Footer fluid/>
                 </div>
             </div>
