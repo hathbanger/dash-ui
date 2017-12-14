@@ -24,7 +24,8 @@ install:
   - npm install -g react-scripts
 # TODO; implement test coverage check
 script:
-  # - echo "Skip Tests"
+  - echo "TESTINGGGGGGGGGGGG"
+  - ls
   - npm test
   # - go test ./... -tags dev -v
   # - goreporter -p ./ -r ./reports -e -f text
