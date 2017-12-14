@@ -30,6 +30,8 @@ install:
   - npm install
 
 before_install:
+  - gcloud --quiet components update
+  - gcloud --quiet components update beta
   - npm config set python `which python`
   - if [ $TRAVIS_OS_NAME == "linux" ]; then
       export CC="gcc-4.7";
@@ -46,8 +48,6 @@ before_install:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
-  - gcloud --quiet components update
-  - gcloud --quiet components update beta
 
 
 before_deploy:
