@@ -1,53 +1,35 @@
 language: node_js
-
-compiler: gcc
+node_js: '4'
+dist: trusty
 sudo: false
-
-services:
-  - docker
-cache:
-    directories:
-      - node_modules
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - gcc-4.7
-      - g++-4.7      
-
+git:
+  depth: 1
 env:
   global:
-    - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
-    - PROJECT_NAME=serene-188901
-    - CLUSTER_NAME=serene
-    - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-    - NODE_ENV=CI    
-    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
-    - SKIP_SASS_BINARY_DOWNLOAD_FOR_CI=true    
-
+  - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
+  - PROJECT_NAME=serene-188901
+  - CLUSTER_NAME=serene
+  - CLOUDSDK_COMPUTE_ZONE=us-central1-a
+  - NODE_ENV=CI    
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - CLOUDSDK_PYTHON_SITEPACKAGES=1
+cache:
+  directories:
+  - node_modules
+  - "$HOME/google-cloud-sdk/"
 install:
+  - travis_wait ./tools/travis/install-gc-sdk.sh
   - npm install
+  - npm run clean
 
 before_install:
-  - gcloud --quiet components update
-  - gcloud --quiet components update beta
-  - npm config set python `which python`
-  - if [ $TRAVIS_OS_NAME == "linux" ]; then
-      export CC="gcc-4.7";
-      export CXX="g++-4.7";
-      export LINK="gcc-4.7";
-      export LINKXX="g++-4.7";
-    fi
-  - nvm --version
-  - node --version
-  - npm --version
-  - gcc --version
-  - g++ --version  
   - gcloud version || true
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
+  - gcloud --quiet components update
+  - gcloud --quiet components update beta
 
 
 before_deploy:
