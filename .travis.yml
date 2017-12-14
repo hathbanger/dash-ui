@@ -1,24 +1,31 @@
-language: go
-go:
-  - 1.9.1
+
+sudo: false
+language: node_js
+node_js:
+  - "node"
+
 cache:
   directories:
-    - "$HOME/coding/google-cloud-sdk"
+    - "$HOME/google-cloud-sdk/"
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
     - PROJECT_NAME=serene-188901
     - CLUSTER_NAME=serene
     - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-before_install:
+
+services:
+  - docker
+
+
+before_deploy:
   - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
   - source /home/travis/google-cloud-sdk/path.bash.inc
   - gcloud --quiet version
   - gcloud --quiet components update
-  - gcloud --quiet components update beta
-  # - go get
-  # - dep ensure
-  
+  - gcloud --quiet components update kubectl
+
+
 install:
   - sudo docker build -t test/build .
 # TODO; implement test coverage check
