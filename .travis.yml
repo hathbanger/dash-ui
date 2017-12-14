@@ -25,6 +25,16 @@ install:
 # TODO; implement test coverage check
 script:
   - echo "TESTINGGGGGGGGGGGG"
+  - git clone https://github.com/facebook/watchman.git
+  - pushd watchman
+  - sudo apt-get install -y autoconf automake build-essential python-dev
+  - ./autogen.sh
+  - ./configure
+  - make
+  - sudo make install
+  - echo "WATCHMANNNN VERSION"
+  - watchman --version
+  - popd
   - ls
   - npm test
   # - go test ./... -tags dev -v
