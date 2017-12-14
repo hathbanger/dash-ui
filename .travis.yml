@@ -1,39 +1,47 @@
-language: node_js
-node_js: '4'
-dist: trusty
+
+# Use Dockerized infrastructure
 sudo: false
-git:
-  depth: 1
-env:
-  global:
-  - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
-  - PROJECT_NAME=serene-188901
-  - CLUSTER_NAME=serene
-  - CLOUDSDK_COMPUTE_ZONE=us-central1-a
-  - NODE_ENV=CI    
-  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
-  - CLOUDSDK_PYTHON_SITEPACKAGES=1
+
+# Use node_js environnement
+language: node_js
+node_js:
+  - "6"
+
+# Cache Gcloud SDK between commands
 cache:
   directories:
-  - node_modules
   - "$HOME/google-cloud-sdk/"
-install:
-  - travis_wait ./tools/travis/install-gc-sdk.sh
-  - npm install
-  - npm run clean
+# Install services
+services:
+  - docker
 
-before_install:
-  - gcloud version || true
-  # - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
-  - source /home/travis/google-cloud-sdk/path.bash.inc
-  - gcloud --quiet version
-  - gcloud --quiet components update
-  - gcloud --quiet components update beta
+env:
+  global:
+    - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
+    - PROJECT_NAME=serene-188901
+    - CLUSTER_NAME=serene
+    - CLOUDSDK_COMPUTE_ZONE=us-central1-a
+    - NODE_ENV=CI    
+
+
+install:
+  - npm install
 
 
 before_deploy:
+  - if [ ! -d "$HOME/google-cloud-sdk/bin" ]; then rm -rf $HOME/google-cloud-sdk; export CLOUDSDK_CORE_DISABLE_PROMPTS=1; curl https://sdk.cloud.google.com | bash; fi
+  - source /home/travis/google-cloud-sdk/path.bash.inc
+  - gcloud --quiet version
+  - gcloud --quiet components update
+  - gcloud --quiet components beta update
   - gcloud --quiet components update kubectl
+
+  # use the decrypted service account credentials to authenticate the command line tool
+  # get the encrypted variable names from travis cli: https://docs.travis-ci.com/user/encrypting-files/
+  - openssl aes-256-cbc -K $TRAVIS_ENCRYPTED_key -iv $TRAVIS_ENCRYPTED_iv -in gcloud-service-key.json.enc -out gcloud-service-key.json -d
+  - gcloud auth activate-service-account --key-file gcloud-service-key.json
+
+  - gcloud config set project PROJECT  
 
 deploy:
   - provider: script
