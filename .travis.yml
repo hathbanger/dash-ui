@@ -1,16 +1,11 @@
-
-# Use Dockerized infrastructure
-sudo: false
-
-# Use node_js environnement
 language: node_js
 node_js:
-  - "6"
+  - "8"
 
-# Cache Gcloud SDK between commands
 cache:
   directories:
-  - "$HOME/google-cloud-sdk/"
+    - node_modules
+    - "$HOME/google-cloud-sdk/"
 # Install services
 services:
   - docker
