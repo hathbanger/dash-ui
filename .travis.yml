@@ -21,6 +21,7 @@ before_install:
   
 install:
   - sudo docker build -t test/build .
+  - npm install -g react-scripts
 # TODO; implement test coverage check
 script:
   # - echo "Skip Tests"
