@@ -1,6 +1,7 @@
-language: go
-go:
-  - 1.9.1
+language: node_js
+node_js:
+  - "stable"
+
 cache:
   directories:
     -s "$HOME/coding/google-cloud-sdk"
