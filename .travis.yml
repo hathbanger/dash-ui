@@ -5,6 +5,9 @@ services:
 cache:
     directories:
       - node_modules
+
+group: deprecated-2017Q2
+
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
