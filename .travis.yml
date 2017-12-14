@@ -3,7 +3,7 @@ go:
   - 1.9.1
 cache:
   directories:
-    -s "$HOME/coding/google-cloud-sdk"
+    - "$HOME/coding/google-cloud-sdk"
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
