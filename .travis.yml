@@ -8,6 +8,8 @@ cache:
 
 group: deprecated-2017Q2
 
+filter_secrets: false
+
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
