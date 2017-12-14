@@ -1,13 +1,10 @@
 language: node_js
 sudo: required
-# cache:
-#   directories:
-#     -s "$HOME/coding/google-cloud-sdk/"
-
-# Install services
 services:
   - docker
-
+cache:
+    directories:
+      - node_modules
 env:
   global:
     - GOOGLE_APPLICATION_CREDENTIALS-~/gcloud-service-key.json
