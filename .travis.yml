@@ -1,8 +1,8 @@
 language: node_js
 sudo: required
-cache:
-  directories:
-    -s "$HOME/coding/google-cloud-sdk/"
+# cache:
+#   directories:
+#     -s "$HOME/coding/google-cloud-sdk/"
 # Install services
 services:
   - docker
