@@ -17,14 +17,14 @@ before_install:
   - gcloud --quiet version
   - gcloud --quiet components update
   - gcloud --quiet components update beta
-  # - go get
-  # - dep ensure
+  # - gcloud docker -- pull gcr.io/serene-188901/dash-ui:latest
   
 install:
   - sudo docker build -t test/build .
 # TODO; implement test coverage check
 script:
-  - echo "Skip Tests"
+  # - echo "Skip Tests"
+  - npm test
   # - go test ./... -tags dev -v
   # - goreporter -p ./ -r ./reports -e -f text
 before_deploy:
