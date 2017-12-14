@@ -1,10 +1,9 @@
 language: node_js
-node_js:
-  - "stable"
-
+sudo: required
 cache:
   directories:
-    -s "$HOME/coding/google-cloud-sdk"
+    - "$HOME/google-cloud-sdk/"
+    
 
 # Install services
 services:
