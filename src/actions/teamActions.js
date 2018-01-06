@@ -25,11 +25,31 @@ export function retrieveTeams(organization) {
     .then((response) => { 
         return response.json();
       }).then((data) => {        
-          console.log("TEAMS DATA", data)           
-            dispatch(receiveTeams(data))
+            if(data){
+              dispatch(receiveTeams(data))
+            }        
       });
   }
 }
 
 
+export function createTeam(creds) {
+  let config =  {
+    method: 'POST',
+    headers:  {
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify(creds)
+  }
+  return dispatch => {
+    // dispatch(requestLogin(creds))
+    return fetch(goApi + "/team", config)
+    .then((response) => { 
+        return response.json();
+      }).then((data) => {
+          // dispatch(receiveTeams())
+          console.log("DATA FROM CREATE TEAMS",data)
+      });
+  }
+}
 

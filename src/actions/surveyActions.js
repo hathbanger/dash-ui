@@ -25,7 +25,6 @@ export function retrieveSurveys(organization) {
     .then((response) => { 
         return response.json();
       }).then((data) => {        
-          console.log("SURVEY DATA", data)           
             dispatch(receiveSurveys(data))
       });
   }

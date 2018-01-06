@@ -36,7 +36,7 @@ function mapStateToProps(state) {
   
   const {   auth  } = state
 
-  const {   isAuthenticated, thisTest, user, organization, teams, surveys } = auth
+  const {   isAuthenticated, thisTest, user, organization, teams, campaigns, surveys } = auth
   
   return {
     isAuthenticated,
@@ -44,6 +44,7 @@ function mapStateToProps(state) {
     user,
     organization,
     teams,
+    campaigns,
     surveys
   }
 }

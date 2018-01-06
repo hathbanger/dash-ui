@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Col, Row } from 'react-bootstrap';
+import { Grid, Col, Row, Table } from 'react-bootstrap';
 // react component used to create charts
 import ChartistGraph from 'react-chartist';
 // function that returns a color based on an interval of numbers
 import { scaleLinear } from "d3-scale";
 
+import {retrieveOrganization} from 'actions/organizationActions'
+import {retrieveSurveys} from 'actions/surveyActions'
 import {retrieveUser} from 'actions/userActions'
 
 
@@ -34,20 +36,9 @@ const options = {
     // startAngle: 270
 };
 
-var dataSales = {
-  labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '10:PM', '12:00PM', '3:00AM', '6:00AM'],
-  series: [
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800],
-    [Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800, Math.random() * 800]
-  ]
-};
 
 var biPolarLineChartOptions = {
-  high: 800,
+  high: 10,
   low: 0,
   showArea: false,
   showLine: true,
@@ -58,15 +49,28 @@ var biPolarLineChartOptions = {
   }
 }
 
-class Dashboard extends Component{
+class Campaigns extends Component{
     constructor(props){
+        var dataSales = {
+          labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '10:PM', '12:00PM', '3:00AM', '6:00AM'],
+          series: [
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10],
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10],
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10],
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10],
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10],
+            [Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10, Math.random() * 10]
+          ]
+        };          
         super(props);
         this.state = {
             surveyRetrieve: false,
             dataPieSeriesData: [0],
             sereneRatingCount: 0,
-            surveyFinishedCount: 0
+            surveyFinishedCount: 0,
+            dataSales: dataSales
         }
+      
 
     }    
     componentDidMount(){
@@ -74,31 +78,38 @@ class Dashboard extends Component{
         if(this.props.user == null){
             this.props.dispatch(retrieveUser())
         }
-        if(this.props.surveys.length){
+
+        let campaignId = this.props.location.pathname.split("/")[this.props.location.pathname.split("/").length - 1];
+
+        let campaign = this.props.campaigns.find(campaign => campaign.id == campaignId);
+
+        var filteredSurveys = this.props.surveys.filter(survey => survey.campaign == campaign.id);
+
+        console.log("filteredSurveys",filteredSurveys)
+
+        if(filteredSurveys.length){
             let sereneArr = []
             let ratingArr = []
             let finishedArr = []
-            if(this.props.surveys){
-                this.props.surveys.forEach(function(survey){
+            if(filteredSurveys){
+                filteredSurveys.forEach(function(survey){
 
                     if(survey.finished){
                         finishedArr.push(survey)
                     }
 
                     survey.answers.forEach(function(answer){
-
                         if(parseInt(answer)){
                             console.log("Answer", parseInt(answer))
                             ratingArr.push(parseInt(answer))
                         }
-
                     });
                 });
 
                     let count = ratingArr.length
                     this.setState({sereneRatingCount: ratingArr.length});         
                     this.setState({surveyFinishedCount: finishedArr.length});         
-                // if(this.props.surveys.length == ratingArr.length){
+                // if(filteredSurveys.length == ratingArr.length){
                     if(ratingArr.length > 0){
                         console.log("ratingArr", ratingArr)
                         let sum = ratingArr.reduce((previous, current) => current += previous);
@@ -109,19 +120,36 @@ class Dashboard extends Component{
             }            
         }
     }
+
+    teamGrabber(teams, teamName){
+        let returnedTeam
+        teams.forEach(team => {
+            if(team.teamName == teamName){
+                returnedTeam = team
+            }
+        })        
+        return returnedTeam
+    }
     
     render(){
-        // let org = this.props.organizations !== undefined ? this.props.organizations[0].users.length : this.props.organizations[0];
+
+
+        let campaignId = this.props.location.pathname.split("/")[this.props.location.pathname.split("/").length - 1];
+
+        let campaign = this.props.campaigns.find(campaign => campaign.id == campaignId);
+
+        console.log('campaign',campaign)
+
         return (
             <div className="main-content">
-            {this.props.organization !== null &&
+            {campaign !== null &&
                 <Grid fluid>
                     <Row>
                         <Col lg={4} sm={4}>
                             <StatsCard
                                 bigIcon={<i className="fa fa-user text-warning"></i>}
                                 statsText="Employees"
-                                statsValue={this.props.organization.users.length}
+                                statsValue={campaign.users.length}
                                 statsIcon={<i className="fa fa-refresh"></i>}
                                 statsIconText="Updated now"
                             />
@@ -130,7 +158,7 @@ class Dashboard extends Component{
                             <StatsCard
                                 bigIcon={<i className="pe-7s-graph1 text-success"></i>}
                                 statsText="Survey's Sent"
-                                statsValue={this.props.organization.surveys.length}
+                                statsValue={campaign.surveys.length}
                                 statsIcon={<i className="fa fa-calendar-o"></i>}
                                 statsIconText="Last day"
                             />
@@ -162,30 +190,29 @@ class Dashboard extends Component{
                         />
                     </Col>
                     <Col md={8}>
-                        <Card
-                            title="Users Behavior"
-                            category="24 Hours performance"
-                            content={
-                                <ChartistGraph
-                                    data={dataSales}
-                                    type="Line"
-                                    options={biPolarLineChartOptions}
-                                    responsiveOptions={responsiveSales}/>
-                                }
-                                legend={
-                                    <div>
-                                        <i className="fa fa-circle text-info"></i> Open
-                                        <i className="fa fa-circle text-danger"></i> Click
-                                        <i className="fa fa-circle text-warning"></i> Click Second Time
-                                    </div>
-                                }
-                                stats={
-                                    <div>
-                                        <i className="fa fa-history"></i> Updated 3 minutes ago
-                                    </div>
-                                }
-                            />
-                        </Col>
+                                    <Table striped hover responsive>
+                                        <thead>
+                                            <tr>
+
+                                                            <th>question</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {campaign &&
+                                                campaign.questions.map((prop,key) => {
+                                                    return (
+                                                        <tr key={prop}>
+                                                            {
+                                                                        <td >{prop}</td>
+                                                            }
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </Table>
+                    </Col>
                     </Row>
                 </Grid>
             }
@@ -194,4 +221,5 @@ class Dashboard extends Component{
     }
 }
 
-export default Dashboard;
+export default Campaigns;
+

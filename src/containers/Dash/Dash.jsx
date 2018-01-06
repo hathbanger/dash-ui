@@ -15,6 +15,7 @@ import NotificationSystem from 'react-notification-system';
 
 import Dashboard from 'views/Dashboard/Dashboard.jsx';
 import Team from 'views/Team/Team.jsx';
+import Campaign from 'views/Campaign/Campaign.jsx';
 
 import Sidebar from 'components/Sidebar/Sidebar.jsx';
 import Header from 'components/Header/Header.jsx';
@@ -115,12 +116,15 @@ class Dash extends Component{
     render(){
         let arrayOfIndices = []
         let arrayOfTypes = []
+
         this.props.teams.forEach(team => {
             let type = team.teamType;
             if(arrayOfIndices.indexOf(type) == -1){
                 arrayOfIndices.push(team.teamType)
             }
         })
+
+        console.log("THIS>PROPS",this.props)
               
         arrayOfIndices.forEach(i => {
             arrayOfTypes.push(this.props.teams.filter(team => team.teamType == i))
@@ -149,6 +153,13 @@ class Dash extends Component{
                 additionalRoutes.push(typeObj);
             });
 
+        this.props.campaigns.forEach(campaign => {
+                let typeObj = {}
+                typeObj.path = `/campaigns/${campaign.id}`;
+                typeObj.component = Campaign;
+
+                additionalRoutes.push(typeObj);
+        })
 
 
         return (
@@ -160,7 +171,6 @@ class Dash extends Component{
                         <Switch>
                             {
                                 additionalRoutes.map((prop,key) => {
-                                    console.log("PROP IN ADDTL ROUTES", prop)
                                     if(prop.collapse){
                                         return prop.views.map((prop,key) => {
                                             if(prop.name === "Notifications"){

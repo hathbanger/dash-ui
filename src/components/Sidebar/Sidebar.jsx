@@ -63,7 +63,6 @@ class Sidebar extends Component{
         return bool;
     }
     render(){
-        console.log("this.props in sidebar", this.props.teams.filter(team => team.teamType == "location"));
         let arrayOfIndices = []
         let arrayOfTypes = []
         this.props.teams.forEach(team => {
@@ -79,26 +78,27 @@ class Sidebar extends Component{
 
         let additionalRoutes = [...dashRoutes]
 
-        arrayOfTypes.forEach(types => {
-                let typeObj = {}
-                typeObj.collapse = true;
-                typeObj.icon = "pe-7s-note2";
-                typeObj.name = types[0].teamType;
-                typeObj.render = true;
-                typeObj.path = `/${types[0].teamType.toLowerCase()}`;
-                typeObj.state = `${types[0].teamType.toLowerCase()}`;
-                typeObj.views = [];
-                types.forEach(type => {
-                    type.icon = "pe-7s-rocket";
-                    type.mini = "US";
-                    type.name = type.teamName;
-                    type.path = `${typeObj.path}/${type.teamName}`;
-                    type.render = true;
-                    type.component = Team;
-                    typeObj.views.push(type);
-                })  
-                additionalRoutes.push(typeObj);
-            });
+        // arrayOfTypes.forEach(types => {
+        //         let typeObj = {}
+        //         typeObj.collapse = true;
+        //         typeObj.icon = "pe-7s-note2";
+        //         typeObj.name = types[0].teamType;
+        //         typeObj.render = true;
+        //         typeObj.path = `/${types[0].teamType.toLowerCase()}`;
+        //         typeObj.state = `${types[0].teamType.toLowerCase()}`;
+        //         typeObj.views = [];
+        //         types.forEach(type => {
+        //             type.icon = "pe-7s-rocket";
+        //             type.mini = type.teamName.substring(0, 2);
+        //             type.name = type.teamName;
+        //             type.path = `${typeObj.path}/${type.teamName}`;
+        //             type.render = true;
+        //             type.component = Team;
+        //             typeObj.views.push(type);
+        //         })  
+        //         additionalRoutes.push(typeObj);
+        //     });
+        
 
         return (
 
@@ -123,6 +123,7 @@ class Sidebar extends Component{
                         */}
                         {
                             additionalRoutes.map((prop,key) => {
+                                console.log('prop',prop)
                                 var st = {};
                                 st[prop["state"]] = !this.state[prop.state];
                                 let newState = this.state
@@ -143,7 +144,7 @@ class Sidebar extends Component{
                                                     <ul className="nav">
                                                         {
                                                             prop.views.map((prop,key) => {
-                                                                console.log("prop.path",prop.path)
+                                                                if(prop.name != "Create Organization" && this.props.organization !== null ){
                                                                 return (
                                                                     <li className={this.activeRoute(prop.path)} key={key}>
                                                                         <NavLink to={prop.path} className="nav-link" activeClassName="active">
@@ -152,6 +153,7 @@ class Sidebar extends Component{
                                                                         </NavLink>
                                                                     </li>
                                                                 );
+                                                                }
                                                             })
                                                         }
                                                     </ul>

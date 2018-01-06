@@ -5,6 +5,7 @@ import {
     FormGroup,
     ControlLabel, FormControl,
     HelpBlock,
+    Form,
 } from 'react-bootstrap';
 
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
@@ -60,7 +61,7 @@ class EmployeesPage extends Component{
             <div className="main-content">
                 <Grid fluid>
                     <Row>
-                        <Col md={6}>
+                        <Col md={12}>
                             <Card
                                 title="Current Employees"
                                 category="Employees still at the company"
@@ -93,26 +94,20 @@ class EmployeesPage extends Component{
                                             }
                                         </tbody>
                                     </Table>
-                                    <FieldGroup
-                                      id="formControlsFile"
-                                      type="file"
-                                      label="File"
-                                      help="Example block-level help text here."
-                                    />
-
                                     </div>
                                 }
                             />
                         </Col>
-                        <Col md={6}>
+                        <Col md={12}>
                             <Card
-                                title="Current thing"
+                                title="Current Employees"
                                 category="Employees still at the company"
                                 tableFullWidth
                                 content={
-									<TwoSimplePieChart/>
+                                     <label className="btn btn-default"><input type="file" hidden/></label>
                                 }
-                            />                    
+                            />
+
                         </Col>
                     </Row>
                 </Grid>

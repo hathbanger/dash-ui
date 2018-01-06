@@ -1,6 +1,7 @@
 import {unmarshallToken} from 'utility/utilityFunctions'
 import {retrieveSurveys} from 'actions/surveyActions'
 import {retrieveTeams} from 'actions/teamActions'
+import {retrieveCampaigns} from 'actions/campaignActions'
 
 export const ORG_RETRIEVE_SUCCESS = 'ORG_RETRIEVE_SUCCESS'
 
@@ -13,6 +14,28 @@ function receiveOrganization(data) {
   }
 }
 
+export function createOrganization(creds) {
+  let token = localStorage.getItem('id_token');
+  let config =  {
+    method: 'POST',
+    headers:  {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type':'application/json'
+    },
+    body: JSON.stringify(creds)
+  }
+
+  return dispatch => {
+    // dispatch(requestLogin(creds))
+    return fetch(goApi + "organization", config)
+    .then((response) => { 
+        return response.json();
+      }).then((data) => {
+          dispatch(receiveOrganization(data))
+          console.log("returned data",data)
+      });
+  }
+}
 
 export function retrieveOrganization(organizationId) {
   let token = localStorage.getItem('id_token');
@@ -28,9 +51,9 @@ export function retrieveOrganization(organizationId) {
     .then((response) => {
         return response.json();
       }).then((data) => {
-          console.log(data)
           dispatch(receiveOrganization(data))
           dispatch(retrieveTeams(organizationId))
+          dispatch(retrieveCampaigns(organizationId))
           dispatch(retrieveSurveys(data))
       });
   }

@@ -113,15 +113,26 @@ class Team extends Component{
             }            
         }
     }
+
+    teamGrabber(teams, teamName){
+        let returnedTeam
+        teams.forEach(team => {
+            if(team.teamName == teamName){
+                returnedTeam = team
+            }
+        })        
+        return returnedTeam
+    }
     
     render(){
-        console.log('this.props.teams', this.props.teams)
-        // let org = this.props.organizations !== undefined ? this.props.organizations[0].users.length : this.props.organizations[0];
+        let teamName = this.props.location.pathname.split("/")[this.props.location.pathname.split("/").length - 1];
+        let team = this.teamGrabber(this.props.teams, teamName)
         return (
             <div className="main-content">
             {this.props.organization !== null &&
                 <Grid fluid>
                     <Row>
+                        <h5>{team.teamName}</h5>
                         <Col lg={4} sm={4}>
                             <StatsCard
                                 bigIcon={<i className="fa fa-user text-warning"></i>}

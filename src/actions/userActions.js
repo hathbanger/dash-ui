@@ -45,7 +45,6 @@ export function retrieveUser() {
         return response.json();
       }).then((data) => {
           dispatch(receiveUser(data))
-          console.log("DATA FROM RETRIEVE USER", data)
           if(data.organization){
             dispatch(retrieveOrganization(data.organization))
           }

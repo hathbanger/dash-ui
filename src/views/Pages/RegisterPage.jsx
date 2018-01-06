@@ -21,6 +21,7 @@ class RegisterPage extends Component{
         this.state = {
             cardHidden: true,
             username: "",
+            phoneNumber: "",
             password: "",
             passwordConfimation: "",
             fetchOrg: false,
@@ -34,12 +35,15 @@ class RegisterPage extends Component{
             this.setState({password: e.target.value})
         } else if (e.target.id == "organizationId"){
             this.setState({organizationId: e.target.value})
+        } else if (e.target.id == "phoneNumber"){
+            this.setState({phoneNumber: e.target.value})
         }
     }
 
     handleFormLoginSubmission(e){
         e.preventDefault();
         let creds = {   "username": this.state.username, 
+                        "phoneNumber":this.state.phoneNumber,
                         "password": this.state.password,
                         "organization": this.props.location.search.split("=")[1]}
         console.log("CREDS IN FORM REGISTER", creds)
@@ -113,6 +117,14 @@ class RegisterPage extends Component{
                                                 />
                                             </FormGroup>
                                         }
+                                        <FormGroup>
+                                            <FormControl
+                                                onChange={e => this.handleFormStateUpdate(e)}
+                                                type="phone"
+                                                placeholder="Phone"
+                                                id="phoneNumber"
+                                            />
+                                        </FormGroup>
                                         <FormGroup>
                                             <FormControl
                                                 onChange={e => this.handleFormStateUpdate(e)}

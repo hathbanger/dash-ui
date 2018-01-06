@@ -19,8 +19,12 @@ import VectorMap from 'views/Maps/VectorMap.jsx';
 import Charts from 'views/Charts/Charts.jsx';
 import Calendar from 'views/Calendar/Calendar.jsx';
 import UserPage from 'views/Pages/UserPage.jsx';
+import Campaigns from 'views/Campaign/Campaigns.jsx';
 import EmployeesPage from 'views/Pages/EmployeesPage.jsx';
 import OrganizationPage from 'views/Pages/OrganizationPage.jsx';
+import CreateCampaign from 'views/Campaign/CreateCampaign.jsx';
+import CreateOrganization from 'views/Organization/CreateOrganization.jsx';
+import CreateTeam from 'views/Team/CreateTeam.jsx';
 
 
 
@@ -44,11 +48,20 @@ var dashRoutes = [
     //     { path: "/forms/validation-forms", name: "Validation Forms", mini: "VF", component: ValidationForms, render: true },
     //     { path: "/forms/wizard", name: "Wizard", mini: "W", component: Wizard, render: true }]
     // },    
-    { path: "/pages/organization-page", name: "Organization", icon: "pe-7s-culture", mini: "US", component: OrganizationPage, render: true },
-    { path: "/pages/employees-page", name: "Employees", icon: "pe-7s-users", mini: "US", component: EmployeesPage, render: true },
-    { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "US", component: UserPage, render: true }
-    // { collapse: true, path: "/tables", name: "Tables", state: "openTables", icon: "pe-7s-news-paper", views:
-    //     [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables },
+    // { path: "/pages/organization-page", name: "Organization", icon: "pe-7s-culture", mini: "OR", component: OrganizationPage, render: true },
+    // { path: "/pages/employees-page", name: "Employees", icon: "pe-7s-users", mini: "EM", component: EmployeesPage, render: true },
+    // { path: "/pages/user-page", name: "User", icon: "pe-7s-user", mini: "USR", component: UserPage, render: true },
+    { path: "/pages/campaigns", name: "Campaigns", icon: "pe-7s-user", mini: "USR", component: Campaigns, render: true },
+    
+    { collapse: true, path: "/create", name: "Create", state: "openForms", render: true, icon: "pe-7s-plus", views:
+        [
+            // { path: "/create/team", name: "Create Team", icon: "pe-7s-plus", mini: "+", component: CreateTeam, render: true },
+            { path: "/create/organization", name: "Create Organization", icon: "pe-7s-plus", mini: "+", component: CreateOrganization, render: true },
+            { path: "/create/campaign", name: "Create Campaign", icon: "pe-7s-plus", mini: "+", component: CreateCampaign, render: true }
+        ]
+    },    
+    // { collapse: true, path: "/tables", name: "Tables", state: "openTables", render: true, icon: "pe-7s-news-paper", views:
+    //     [{ path: "/tables/regular-tables", name: "Regular Tables", mini: "RT", component: RegularTables, render: true },
     //     { path: "/tables/extended-tables", name: "Extended Tables", mini: "ET", component: ExtendedTables },
     //     { path: "/tables/data-tables", name: "Data Tables", mini: "DT", component: DataTables }]
     // },
