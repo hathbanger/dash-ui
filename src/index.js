@@ -25,7 +25,6 @@ import './assets/css/pe-icon-7-stroke.css';
 import rootReducer from './reducers/rootReducer'
 
 import thunkMiddleware from 'redux-thunk'
-
 const history = createBrowserHistory();
 
 // const store = createStore(
