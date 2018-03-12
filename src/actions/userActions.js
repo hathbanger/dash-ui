@@ -1,5 +1,6 @@
 import {generateFetchConfigCredentials} from 'utility/utilityFunctions'
-import {retrieveOrganization} from 'actions/organizationActions'
+import {retrieveOrganization, createOrganization} from 'actions/organizationActions'
+import {unmarshallToken} from 'actions/authActions'
 
 export const USER_RETRIEVE_SUCCESS = 'USER_RETRIEVE_SUCCESS'
 
@@ -30,6 +31,9 @@ export function createUser(creds) {
           if(data.token){
             localStorage.setItem("id_token", data.token)
             dispatch(receiveUser())
+            let user = unmarshallToken(data.token)
+            console.log("USER",user)
+            dispatch(createOrganization({"organizationName": creds.organizationName, "userId":user.id}))
             window.location.href = "/dashboard"
           }
       });

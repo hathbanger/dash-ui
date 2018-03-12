@@ -7,7 +7,7 @@ import {
 
 import { validateToken } from '../../actions/authActions'
 import { createUser } from '../../actions/userActions'
-import { retrieveOrganization } from '../../actions/organizationActions'
+import { retrieveOrganization, createOrganization } from '../../actions/organizationActions'
 
 import Card from 'components/Card/Card.jsx';
 
@@ -37,6 +37,8 @@ class RegisterPage extends Component{
             this.setState({organizationId: e.target.value})
         } else if (e.target.id == "phoneNumber"){
             this.setState({phoneNumber: e.target.value})
+        } else if (e.target.id == "organizationName"){
+            this.setState({newOrganization: e.target.value})
         }
     }
 
@@ -45,7 +47,8 @@ class RegisterPage extends Component{
         let creds = {   "username": this.state.username, 
                         "phoneNumber":this.state.phoneNumber,
                         "password": this.state.password,
-                        "organization": this.props.location.search.split("=")[1]}
+                        "organization": this.props.location.search.split("=")[1],
+                        "organizationName": this.state.newOrganization}
         console.log("CREDS IN FORM REGISTER", creds)
         this.props.dispatch(createUser(creds))
     }
@@ -139,6 +142,14 @@ class RegisterPage extends Component{
                                                 type="password"
                                                 placeholder="Password Confirmation"
                                                 id="passwordConfimation"
+                                            />
+                                        </FormGroup>
+                                        <FormGroup>
+                                            <FormControl
+                                                onChange={e => this.handleFormStateUpdate(e)}
+                                                type="text"
+                                                placeholder="Organization Name"
+                                                id="organizationName"
                                             />
                                         </FormGroup>
                                     </div>
