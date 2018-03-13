@@ -3,7 +3,7 @@ import {retrieveOrganization} from 'actions/organizationActions'
 
 export const CAMPAIGNS_RETRIEVE_SUCCESS = 'CAMPAIGNS_RETRIEVE_SUCCESS'
 
-const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.155.147.15/api";
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.155.147.15:1323/api";
 
 
 function receiveCampaigns(data) {

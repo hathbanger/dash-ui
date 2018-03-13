@@ -7,7 +7,7 @@ export const LOGOUT_FAILURE = 'LOGOUT_FAILURE'
 
 export const AUTHENTICATE_SUCCESS = 'AUTHENTICATE_SUCCESS'
 
-const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.155.147.15/api";
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.155.147.15:1323/api";
 
 function requestLogin(creds) {
   return {
