@@ -2,7 +2,7 @@ import {unmarshallToken} from 'utility/utilityFunctions'
 
 export const SURVEYS_RETRIEVE_SUCCESS = 'SURVEYS_RETRIEVE_SUCCESS'
 
-const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.236.198.6/api";
+const goApi = window.location.hostname == "localhost" ? "http://localhost:1323/api" : "http://104.155.147.15/api";
 
 
 function receiveSurveys(data) {
